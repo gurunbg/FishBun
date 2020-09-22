@@ -1,0 +1,16 @@
+<resources>
+    <string name="album">Изображения</string>
+    <string name="camera">камера</string>
+    <string name="done">завершить</string>
+    <string name="done_all">завершить все</string>
+    <string name="msg_no_selected">Не выбрано ни одного изображения</string>
+    <string name="str_all_view">Все изображения</string>
+    <string name="msg_permission">Разрешение не получено</string>
+    <string name="msg_no_image">Нет доступных изображений</string>
+    <string name="msg_full_image">Вы выбрали максимальное кол-во изображений</string>
+    <string name="msg_loading_image">Загрузка…</string>
+    <string name="image">изображение</string>
+    <string name="msg_error">Что-то пошло не так. Попробуйте ещё раз</string>
+    <string name="title_toolbar" formatted="false" translatable="false">%s (%d/%d)</string>
+    <string name="msg_minimum_image">Пожалуйста, выебрите минимум <b>%d</b> изображений.</string>
+</resources>
