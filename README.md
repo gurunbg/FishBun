@@ -15,14 +15,15 @@ _FishBun_ is a highly customizable image picker for Android.
 <img src="/pic/fishbuns.png">
 
 
-## What's New in _FishBun_ 0.11.2? :tada:
+## What's New in _FishBun_ 1.0.0-alpha03? :tada:
 
-- added some guide for reporting issue[#176](https://github.com/sangcomz/FishBun/pull/176)
-- Java to Kotlin[#174](https://github.com/sangcomz/FishBun/pull/174), [#175](https://github.com/sangcomz/FishBun/pull/175), [#179](https://github.com/sangcomz/FishBun/pull/179), [#185](https://github.com/sangcomz/FishBun/pull/185), [#187](https://github.com/sangcomz/FishBun/pull/187)
-- fix README.md for App used[#180](https://github.com/sangcomz/FishBun/pull/180)
-- Runtime permission for camera [#116](https://github.com/sangcomz/FishBun/issue/116) 
-- Implement Instrument test code [#186](https://github.com/sangcomz/FishBun/pull/186)
-- Fix bug, when Image displays in wrong orientation [#184](https://github.com/sangcomz/FishBun/pull/184)  
+- Refactoring for rapid development:rocket::rocket::rocket:
+- Change PickerSpanCount default value (`3`->`4`)
+- target SDK 29 support
+  - In API 29 or higher, the camera can be used only in the total image folder.
+- Fix Issue(#215)
+- Change DetailView statusBar color
+- Removed Picasso and added Coil
 
 
 ## Customizable Styles
@@ -69,6 +70,8 @@ FishBun.with(WithActivityActivity.this)
         .setMenuAllDoneText("All Done")
         .setActionBarTitle("FishBun Dark")
         .textOnNothingSelected("Please select three or more!")
+        .exceptMimeType(listOf(MimeType.GIF))
+        .setSpecifyFolderList(arrayListOf("Screenshots", "Camera"))
         .startAlbum();
 ```
 
@@ -118,18 +121,19 @@ Setting up _FishBun_ requires to add this Gradle configuration:
 
     dependencies {
         // Under the Android Plugin 3.0.0. 
-        compile 'com.sangcomz:FishBun:0.10.0'
+        compile 'com.sangcomz:FishBun:1.0.0-alpha02'
         
         compile 'com.squareup.picasso:picasso:2.71828'
+        compile 'io.coil-kt:coil:0.11.0'
         or
         compile 'com.github.bumptech.glide:glide:4.9.0'
                 
         // Android plugin 3.0.0 or higher.
-        implementation 'com.sangcomz:FishBun:0.11.2'
+        implementation 'com.sangcomz:FishBun:1.0.0-alpha03'
         
-        implementation 'com.squareup.picasso:picasso:2.5.2'
+        implementation 'io.coil-kt:coil:0.11.0'
         or
-        implementation 'com.github.bumptech.glide:glide:4.9.0'
+        implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     } 
     
@@ -155,12 +159,12 @@ and implement `OnActivityResult`:
                                     Intent imageData) {
         super.onActivityResult(requestCode, resultCode, imageData);
         switch (requestCode) {
-            case Define.ALBUM_REQUEST_CODE:
+            case FishBun.FISHBUN_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     // path = imageData.getStringArrayListExtra(Define.INTENT_PATH);
                     // you can get an image path(ArrayList<String>) on <0.6.2
 
-                    path = imageData.getParcelableArrayListExtra(Define.INTENT_PATH);
+                    path = imageData.getParcelableArrayListExtra(INTENT_PATH);
                     // you can get an image path(ArrayList<Uri>) on 0.6.2 and later
                     break;
                 }
@@ -191,7 +195,45 @@ Various customizable features can be controlled by chained methods as in:
             .textOnNothingSelected("Nothing Selected")
             .setSelectCircleStrokeColor(Color.BLACK)
             .isStartInAllView(false)
+            .exceptMimeType(listOf(MimeType.GIF))
+            .setSpecifyFolderList(arrayListOf("Screenshots", "Camera"))
             .startAlbum();
+
+### attribute
+
+|            Method Name            | Description                                                           |       Default Value      |
+|:---------------------------------:|-----------------------------------------------------------------------|:------------------------:|
+|         setSelectedImages         | Set the already selected image                                        | null |
+|             setMaxCount           | Maximum number of images selected                                     | 10 |
+|             setMinCount           | Minimum number of images selected                                     | 1 |
+|            setRequestCode         | Set RequestCode                                                       | 27 |
+|    setReachLimitAutomaticClose    | Picker automatically ends when the number of images is selected       | false |
+|       exceptMimeType              | Set file type to exclude(gif, png, jpeg, bmp, webp)                   | NONE |
+|   setAlbumThumbnailSize           | Thumbnail size of album screen                                        | 70dp |
+|      setPickerSpanCount           | Set the picker's span count                                           | 4 |
+|      setActionBarColor            | Set background color of action bar, statusBar color, set light theme  | #3F51B5, #303F9F, false  |
+|   setActionBarTitleColor          | Set the title color of the action bar                                 | #ffffff |
+|   textOnNothingSelected           | Message when nothing is selected                                      | "There is no selected image." |
+| textOnImagesSelectionLimitReached | Message when the image is already all selected                        | "Selection full. Deselect an image to choose another." |
+|     setButtonInAlbumActivity      | Set Selected button visibility in album screen                        | false |
+|       setAlbumSpanCount           | Set the album's span count                                            | 1, 2 |
+|   setAlbumSpanCountOnlyLandscape  | Set the album's span count when landscape                             | 2 |
+|    setAlbumSpanCountOnlPortrait   | Set the album's span count when portrait                              | 1 |
+|       setAllViewTitle             | Set the name of all views                                             | "All view" |
+|       setActionBarTitle           | Set the title of the action bar                                       | "Album" |
+|    setHomeAsUpIndicatorDrawable   | Customizing back button of the action bar                             | null |
+|       setDoneButtonDrawable       | Customizing done button of the action bar                             | null |
+|       setAllDoneButtonDrawable    | Customizing all done button of the action bar                         | null |
+|       setIsUseAllDoneButton       | Set whether to use the Done button                                    | false |
+|       setMenuDoneText             | Set text for Done button                                              | null |
+|       setMenuAllDoneText          | Set text for All Done button                                          | null |
+|       setMenuTextColor            | Set text color for menu                                               | Integer.MAX_VALUE |
+|       setIsUseDetailView          | Set whether to use detail screen                                      | false |
+|       setIsShowCount              | Set whether to show counting numbers                                  | false |
+|    setSelectCircleStrokeColor     | Set select circle color                                               | #c1ffffff |
+|       isStartInAllView            | Set to start with all view                                            | false |
+|       setSpecifyFolderList        | Set folder to show                                                    | NONE |
+|       hasCameraInPickerPage       | Set whether to use the camera button on picker screen                 | false |
 
 
 ## Android M Permission
@@ -206,7 +248,7 @@ Running on Android M, _FishBun_ checks if it has proper permission for you befor
 
 | Project Name | Result Screen   |
 |:---------:|---|
-| Pandaz  <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=com.pwdr.panda"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p> |  <img src="/pic/pandaz_result.gif"> |
+| Pandaz(unavailable now)  <p style="float:left;"> |  <img src="/pic/pandaz_result.gif"> |
 | Multi photo resize compress crop in batch PicTools  <p style="float:left;"> <a href="https://play.google.com/store/apps/details?id=omkar.tenkale.pictoolsandroid&hl=en_US"> <img HEIGHT="40" WIDTH="135" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a></p> |  <img src="/pic/multi_photo_result.gif"> |
 
 

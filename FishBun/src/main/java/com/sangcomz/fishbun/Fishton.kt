@@ -11,37 +11,38 @@ import java.util.ArrayList
 /**
  * Created by seokwon.jeong on 04/01/2018.
  */
-class Fishton {
-    var imageAdapter: ImageAdapter? = null
-    var pickerImages: Array<Uri>? = null
+object Fishton {
+    lateinit var imageAdapter: ImageAdapter
+    var currentPickerImageList: List<Uri> = emptyList()
 
     //BaseParams
     var maxCount: Int = 0
     var minCount: Int = 0
-    var isExceptGif: Boolean = false
+    var exceptMimeTypeList = emptyList<MimeType>()
     var selectedImages = ArrayList<Uri>()
 
     //CustomizationParams
+    var specifyFolderList = emptyList<String>()
     var photoSpanCount: Int = 0
     var albumPortraitSpanCount: Int = 0
     var albumLandscapeSpanCount: Int = 0
 
     var isAutomaticClose: Boolean = false
-    var isButton: Boolean = false
+    var hasButtonInAlbumActivity: Boolean = false
 
     var colorActionBar: Int = 0
     var colorActionBarTitle: Int = 0
     var colorStatusBar: Int = 0
 
     var isStatusBarLight: Boolean = false
-    var isCamera: Boolean = false
+    var hasCameraInPickerPage: Boolean = false
 
     var albumThumbnailSize: Int = 0
 
-    var messageNothingSelected: String? = null
-    var messageLimitReached: String? = null
-    var titleAlbumAllView: String? = null
-    var titleActionBar: String? = null
+    var messageNothingSelected: String = ""
+    var messageLimitReached: String = ""
+    var titleAlbumAllView: String = ""
+    var titleActionBar: String = ""
 
     var drawableHomeAsUpIndicator: Drawable? = null
     var drawableDoneButton: Drawable? = null
@@ -62,35 +63,33 @@ class Fishton {
     var isStartInAllView: Boolean = false
 
     init {
-        init()
+        initValue()
     }
 
-    fun refresh() = init()
+    fun refresh() = initValue()
 
-    private fun init() {
-        //Adapter
-        imageAdapter = null
-
+    private fun initValue() {
         //BaseParams
         maxCount = 10
         minCount = 1
-        isExceptGif = true
+        exceptMimeTypeList = emptyList()
         selectedImages = ArrayList()
 
         //CustomizationParams
-        photoSpanCount = 3
+        specifyFolderList = emptyList()
+        photoSpanCount = 4
         albumPortraitSpanCount = 1
         albumLandscapeSpanCount = 2
 
         isAutomaticClose = false
-        isButton = false
+        hasButtonInAlbumActivity = false
 
         colorActionBar = Color.parseColor("#3F51B5")
         colorActionBarTitle = Color.parseColor("#ffffff")
         colorStatusBar = Color.parseColor("#303F9F")
 
         isStatusBarLight = false
-        isCamera = false
+        hasCameraInPickerPage = false
 
         albumThumbnailSize = Integer.MAX_VALUE
 
@@ -112,24 +111,29 @@ class Fishton {
     }
 
     fun setDefaultMessage(context: Context) {
-        messageNothingSelected =
-            messageNothingSelected ?: context.getString(R.string.msg_no_selected)
+        if (messageNothingSelected.isEmpty()) {
+            messageNothingSelected = context.getString(R.string.msg_no_selected)
+        }
 
-        messageLimitReached =
-            messageLimitReached ?: context.getString(R.string.msg_full_image)
+        if (messageLimitReached.isEmpty()) {
+            messageLimitReached = context.getString(R.string.msg_full_image)
+        }
 
-        titleAlbumAllView =
-            titleAlbumAllView ?: context.getString(R.string.str_all_view)
+        if (titleAlbumAllView.isEmpty()) {
+            titleAlbumAllView = context.getString(R.string.str_all_view)
+        }
 
-        titleActionBar =
-            titleActionBar ?: context.getString(R.string.album)
+        if (titleActionBar.isEmpty()) {
+            titleActionBar = context.getString(R.string.album)
+        }
     }
 
     fun setMenuTextColor() {
         if (drawableDoneButton != null
             || drawableAllDoneButton != null
             || strDoneMenu == null
-            || colorTextMenu != Integer.MAX_VALUE)
+            || colorTextMenu != Integer.MAX_VALUE
+        )
             return
 
         colorTextMenu = if (isStatusBarLight) Color.BLACK else colorTextMenu
@@ -142,14 +146,5 @@ class Fishton {
             } else {
                 albumThumbnailSize
             }
-    }
-
-    private object FishtonHolder {
-        val INSTANCE = Fishton()
-    }
-
-    companion object {
-        @JvmStatic
-        fun getInstance() = FishtonHolder.INSTANCE
     }
 }

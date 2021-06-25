@@ -11,8 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
-import com.sangcomz.fishbun.adapter.image.impl.PicassoAdapter
-import com.sangcomz.fishbun.define.Define
+import com.sangcomz.fishbun.adapter.image.impl.CoilAdapter
 import kotlinx.android.synthetic.main.activity_withactivity.*
 import java.util.*
 
@@ -46,8 +45,8 @@ class WithActivityActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, imageData)
 
-        if (requestCode == Define.ALBUM_REQUEST_CODE && resultCode == RESULT_OK) {
-            path = imageData!!.getParcelableArrayListExtra(Define.INTENT_PATH)
+        if (requestCode == FishBun.FISHBUN_REQUEST_CODE && resultCode == RESULT_OK) {
+            path = imageData!!.getParcelableArrayListExtra(FishBun.INTENT_PATH)
             imageAdapter.changePath(path)
         }
     }
@@ -66,15 +65,13 @@ class WithActivityActivity : AppCompatActivity() {
                 0 -> {
                     FishBun.with(this@WithActivityActivity)
                         .setImageAdapter(GlideAdapter())
-                        .setIsUseAllDoneButton(true)
-                        .setMenuDoneText("Choose")
-                        .setMenuAllDoneText("Choose All")
+                        .setSelectedImages(path)
                         .startAlbum()
                 }
                 //dark
                 1 -> {
                     FishBun.with(this@WithActivityActivity)
-                        .setImageAdapter(PicassoAdapter())
+                        .setImageAdapter(GlideAdapter())
                         .setMaxCount(5)
                         .setMinCount(3)
                         .setPickerSpanCount(5)
@@ -110,7 +107,7 @@ class WithActivityActivity : AppCompatActivity() {
                 //Light
                 2 -> {
                     FishBun.with(this@WithActivityActivity)
-                        .setImageAdapter(PicassoAdapter())
+                        .setImageAdapter(CoilAdapter())
                         .setMaxCount(50)
                         .setPickerSpanCount(4)
                         .setActionBarColor(

@@ -11,8 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sangcomz.fishbun.FishBun
-import com.sangcomz.fishbun.adapter.image.impl.PicassoAdapter
-import com.sangcomz.fishbun.define.Define
+import com.sangcomz.fishbun.adapter.image.impl.CoilAdapter
 import kotlinx.android.synthetic.main.fragment_sub.*
 import java.util.*
 
@@ -40,7 +39,7 @@ class SubFragment : Fragment() {
 
         btn_add_images.setOnClickListener {
             FishBun.with(this@SubFragment)
-                .setImageAdapter(PicassoAdapter())
+                .setImageAdapter(CoilAdapter())
                 .setMaxCount(10)
                 .setActionBarColor(Color.parseColor("#3F51B5"), Color.parseColor("#303F9F"))
                 .setSelectedImages(path)
@@ -52,8 +51,8 @@ class SubFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            Define.ALBUM_REQUEST_CODE -> if (resultCode == Activity.RESULT_OK) {
-                path = data!!.getParcelableArrayListExtra(Define.INTENT_PATH)
+            FishBun.FISHBUN_REQUEST_CODE -> if (resultCode == Activity.RESULT_OK) {
+                path = data!!.getParcelableArrayListExtra(FishBun.INTENT_PATH)
                 imageAdapter.changePath(path)
             }
         }
